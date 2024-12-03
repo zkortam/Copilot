@@ -25,7 +25,8 @@
         "key": "tray"
       },
       "queryRole": "measure",
-      "minCount": 1
+      "minCount": 1,
+      "maxCount": 1
     }
   ]
 }

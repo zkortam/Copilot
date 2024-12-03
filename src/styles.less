@@ -1,9 +1,334 @@
-/* add css module styles here (optional) */
+.copilot-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background-color: #ffffff; /* Pure white background */
+}
 
-.test {
-  margin: 2em;
-  padding: 0.5em;
-  border: 2px solid #000;
-  font-size: 2em;
+.copilot-history {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background-color: #ffffff; /* Pure white */
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Consistent spacing between all bubbles */
+}
+
+.message {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 24px;
+  line-height: 1.5;
+  font-size: 14px;
+  position: relative;
+  word-wrap: break-word;
+  transform: translateY(10px); /* Slightly offset */
+  transition: opacity 0.25s ease-in, transform 0.25s ease-in;
+}
+
+/* User message: aligned to the far right */
+.message.user {
+  align-self: flex-end;
+  background-color: #007bff;
+  color: #ffffff;
+  border-radius: 24px 24px 0 24px; /* Rounded corners */
+  text-align: left;
+  margin-right: 0; /* Flush against the right */
+  transform: translateY(0); /* Reset transform */
+  animation: user-glow 0.5s ease-in;
+}
+
+@keyframes user-glow {
+  0% {
+    box-shadow: 0 0 16px #007bff;
+  }
+  40% {
+    box-shadow: 0 0 24px #007bff;
+  }
+  75% {
+    box-shadow: 0 0 12px #007bff;
+  }
+  100% {
+    box-shadow: 0 0 0px #007bff;
+  }
+}
+
+/* AI message: aligned to the far left */
+.message.ai {
+  align-self: flex-start;
+  background-color: #e0e0e0; /* Light gray */
+  color: #333333;
+  border-radius: 24px 24px 24px 0; /* Rounded corners */
+  text-align: left;
+  margin-left: 0; /* Flush against the left */
+}
+
+/* AI crafting message */
+.message.ai.crafting {
+  position: relative;
+  width: 150px; /* Fixed width for crafting bubble */
+  height: auto;
+  background-color: #e0e0e0;
+  color: #333333;
+  border-radius: 24px 24px 24px 0;
   text-align: center;
+  opacity: 0.7; /* 70% opacity for crafting messages */
+  animation: glowing 1.5s infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Gradient animation for the "Thinking..." text */
+.message.ai.crafting::after {
+  content: "Thinking...";
+  background: linear-gradient(90deg, #007bff, #8a2be2, #007bff);
+  background-size: 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-text 1.5s infinite;
+}
+
+@keyframes gradient-text {
+  0% {
+    background-position: 0%;
+  }
+  50% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: 0%;
+  }
+}
+
+/* Glowing border for AI crafting bubble */
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 8px #007bff;
+  }
+  50% {
+    box-shadow: 0 0 16px #8a2be2;
+  }
+  100% {
+    box-shadow: 0 0 8px #007bff;
+  }
+}
+
+/* Arrow icon for Send button */
+.arrow-icon {
+  font-size: 18px; /* Increased font size for thickness */
+  font-weight: 900; /* Thicker arrow */
+}
+
+/* Input and button styles */
+.copilot-input {
+  display: flex;
+  padding: 10px;
+  background-color: #ffffff; /* Match background */
+  gap: 10px;
+}
+
+.copilot-input input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ccc; /* Retained border */
+  border-radius: 24px; /* Rounded input */
+  outline: none;
+  font-size: 14px;
+  background-color: #ffffff; /* Match overall background color */
+}
+
+.copilot-input input:focus {
+  border-color: #007bff; /* Highlighted border on focus */
+  box-shadow: 0 0 4px #007bff; /* Subtle glow effect on focus */
+}
+
+.copilot-input button {
+  padding: 12px 16px;
+  border: none; /* Removed border */
+  border-radius: 50%; /* Fully rounded button */
+  background-color: #007bff;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Button gradient animation when AI is generating */
+.copilot-input button.generating {
+  background: linear-gradient(90deg, #007bff, #8a2be2);
+  animation: button-ring 1.5s infinite;
+}
+
+@keyframes button-ring {
+  0% {
+    box-shadow: 0 0 0px 0px rgba(138, 43, 226, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px 4px rgba(138, 43, 226, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0px 0px rgba(138, 43, 226, 0.7);
+  }
+}
+
+.copilot-input button:hover {
+  background-color: #0056b3;
+}
+
+.rotating {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.svg-icon {
+  width: 150px; /* Adjust size as needed */
+  height: 150px;
+  fill: #e8eaed; /* Arrow color */
+}
+
+.bubble-actions {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  bottom: -25px;
+  right: 0;
+}
+
+.copy-button,
+.edit-button {
+  background: #333333;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.copy-button:hover,
+.edit-button:hover {
+  background: #555555;
+}
+
+.editing-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.done-button {
+  background: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.copy-button {
+  transition: opacity 0.2s ease-in-out;
+  opacity: 0; /* Initially hidden */
+}
+
+.message:hover .copy-button {
+  opacity: 1; /* Show button on hover */
+}
+
+.loading-pill {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 30px; /* Adequate padding for pill effect */
+  font-size: 16px; /* Larger font size */
+  color: transparent; /* Hide default text color */
+  background: linear-gradient(90deg, #007bff, #8a2be2, #007bff);
+  background-size: 300%; /* Creates the gradient animation effect */
+  background-clip: text;
+  -webkit-background-clip: text; /* For Safari and Chrome */
+  text-align: center;
+  border-radius: 9999px; /* Pill shape */
+  z-index: 1;
+  animation: gradient-text 3s infinite, fade-out 1s 3s forwards, pill-glow 3s infinite; /* Add glow animation */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Base shadow */
+}
+
+.loading-pill::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 9999px; /* Fully rounded border */
+  padding: 2px; /* Width of the border */
+  background: linear-gradient(90deg, #007bff, #8a2be2);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  z-index: -1; /* Ensure it stays behind the content */
+}
+
+@keyframes gradient-text {
+  0% {
+    background-position: 0%;
+  }
+  50% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: 0%;
+  }
+}
+
+@keyframes pill-glow {
+  0% {
+    box-shadow: 0 0 5px 0 rgba(0, 123, 255, 0.0.3), 0 0 10px 0 rgba(138, 43, 226, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 10px 5px rgba(0, 123, 255, 0.3), 0 0 20px 10px rgba(138, 43, 226, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 5px 0 rgba(0, 123, 255, 0.3), 0 0 10px 0 rgba(138, 43, 226, 0.3);
+  }
+}
+
+@keyframes gradient-border {
+  0% {
+    border-image-source: linear-gradient(90deg, #007bff, #8a2be2);
+  }
+  50% {
+    border-image-source: linear-gradient(270deg, #007bff, #8a2be2);
+  }
+  100% {
+    border-image-source: linear-gradient(90deg, #007bff, #8a2be2);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
